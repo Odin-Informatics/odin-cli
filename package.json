@@ -1,35 +1,36 @@
 {
   "name": "@odin-informatics/cli",
-  "version": "1.0.0",
-  "description": "Official developer and infrastructure CLI for Odin Informatics ecosystem",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Odin Bilişim'in yerel geliştirici yardımcı aracı (deneysel). Ağ bağlantısı kurmaz.",
   "main": "dist/index.js",
   "bin": {
     "odin": "./bin/odin.js"
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts",
+    "test": "npm run build && node --test dist/__tests__/envcheck.test.js",
     "start": "node bin/odin.js"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "keywords": [
-    "odin",
     "cli",
-    "ai",
-    "cloud",
-    "developer-tools",
-    "pos",
-    "devops"
+    "dotenv",
+    "developer-tools"
   ],
-  "author": "Odin Informatics Engineering Team <dev@odinbilisim.com>",
+  "author": "Odin Bilişim <info@odinbilisim.com>",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Odin-Informatics/odin-cli.git"
+  },
   "dependencies": {
-    "commander": "^12.0.0",
-    "chalk": "^5.3.0",
-    "ora": "^8.0.1"
+    "commander": "^12.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/node": "^20.11.0",
-    "tsx": "^4.7.0"
+    "@types/node": "^20.14.0",
+    "typescript": "^5.4.0"
   }
 }

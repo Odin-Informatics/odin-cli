@@ -1,113 +1,72 @@
-# ⚡ Odin CLI (`@odin-informatics/cli`)
+# odin-cli
 
-[![npm version](https://img.shields.io/badge/npm-v1.0.0-cb3837.svg?style=flat-square&logo=npm)](https://npmjs.com)
-[![Node.js Version](https://img.shields.io/badge/node->=18.0.0-brightgreen.svg?style=flat-square&logo=node.js)](https://nodejs.org)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square)](LICENSE)
-[![Organization](https://img.shields.io/badge/Odin-Informatics-0F172A?style=flat-square&logo=github)](https://github.com/Odin-Informatics)
+[![CI](https://github.com/Odin-Informatics/odin-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/Odin-Informatics/odin-cli/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-**The Developer and Operations Command-Line Interface for Odin Informatics Cloud, AI, and Edge Systems.**
+Odin Bilişim ekibinin projelerinde kullandığı küçük, **yerel** bir geliştirici yardımcı aracı.
 
-The `odin` CLI equips developers, system engineers, and DevOps teams with a unified command-line experience to manage enterprise infrastructure, query Odin AI models, perform environment health checks, and synchronize local POS hardware nodes with Odin Cloud.
+> **Durum:** deneysel (0.x). npm'de yayınlanmadı; kaynaktan kurulur.
+> Araç **hiçbir ağ bağlantısı kurmaz**, veri göndermez, API anahtarı saklamaz. Bütün komutlar yalnızca
+> çalıştığı bilgisayarı ve verdiğiniz dosyaları okur.
 
----
-
-## 🚀 Installation
-
-### Global Installation via NPM
-
-```bash
-npm install -g @odin-informatics/cli
-```
-
-Or run directly without installation using `npx`:
-
-```bash
-npx @odin-informatics/cli --help
-```
-
----
-
-## 🛠️ Usage & Commands
-
-```bash
-odin [command] [options]
-```
-
-### 1. `odin status`
-Check the health status of all Odin Cloud gateways, inference clusters, and POS endpoints:
-
-```bash
-odin status
-```
-
-**Output:**
-```
-⚡ Odin Infrastructure Health Check
-
-  ● Odin AI Inference API   : ONLINE (Latency: 38ms)
-  ● Odin POS Cloud Gateway   : ONLINE (100% operational)
-  ● Odin Enterprise DB       : ONLINE (Cluster: tr-central-1)
-  ● Security & Zero-Trust    : ENFORCED
-
-All systems operational. (https://odinbilisim.com)
-```
-
----
-
-### 2. `odin ai <prompt>`
-Query Odin AI models directly from your terminal:
-
-```bash
-odin ai "Mikroservis mimarisinde idempotency nasıl sağlanır?"
-```
-
-You can specify models using the `-m` flag:
-```bash
-odin ai "Generate a Docker Compose template" -m odin-v2-coder
-```
-
----
-
-### 3. `odin doctor`
-Analyze and validate your local developer environment for prerequisites and connectivity:
-
-```bash
-odin doctor
-```
-
----
-
-### 4. `odin pos <action>`
-Manage local edge POS hardware, printer diagnostics, and cloud catalog sync:
-
-```bash
-# Sync offline POS cache with cloud
-odin pos sync
-
-# Test peripheral hardware drivers
-odin pos test
-```
-
----
-
-## 🤝 Development & Contribution
+## Kurulum
 
 ```bash
 git clone https://github.com/Odin-Informatics/odin-cli.git
 cd odin-cli
 npm install
 npm run build
-npm start -- --help
+npm link        # isteğe bağlı: `odin` komutunu her yerden çalıştırır
 ```
 
----
+Node.js 20 veya üstü gerekir.
 
-## 📄 License
+## Komutlar
 
-Distributed under the **Apache-2.0 License**. See [LICENSE](LICENSE) for details.
+### `odin doctor`
 
----
+Geliştirme ortamını yerelde kontrol eder: Node.js sürümü, npm, git, işlemci, bellek ve bulunduğunuz
+klasörün diskindeki boş alan. Node.js sürümü yetersizse çıkış kodu `1` olur.
 
-<div align="center">
-<sub>Engineered with precision by <strong>Odin Informatics</strong> • <a href="https://www.odinbilisim.com">odinbilisim.com</a></sub>
-</div>
+```
+odin doctor — yerel kontrol, ağ bağlantısı kurulmaz
+
+  ✔ İşletim sistemi    linux 6.8.0 (x64)
+  ✔ İşlemci / bellek   16 çekirdek, 22262 / 30987 MB boş
+  ✔ Node.js            v22.11.0
+  ✔ npm                10.9.0
+  ✔ git                git version 2.43.0
+  ✔ Disk (bu klasör)   23.6 GB boş
+
+✔ Ortam hazır.
+```
+
+### `odin info [--json]`
+
+Sistem bilgisini yazdırır. `--json` ile betiklerde kullanılabilir.
+
+### `odin env-check [-e .env] [-x .env.example]`
+
+Bir projenin `.env` dosyasını `.env.example` ile karşılaştırır:
+
+- **eksik anahtarlar** — örnekte olup `.env`'de olmayanlar (çıkış kodu `1`)
+- **boş değerli anahtarlar** — tanımlı ama değeri boş olanlar
+- **fazla anahtarlar** — `.env`'de olup örnekte olmayanlar
+
+Değerler hiçbir zaman ekrana yazdırılmaz; yalnızca anahtar adları raporlanır. CI'da dağıtım öncesi kontrol
+olarak kullanılabilir:
+
+```bash
+odin env-check -e .env.production -x .env.example
+```
+
+## Geliştirme
+
+```bash
+npm install
+npm test        # derler ve node:test ile testleri çalıştırır
+```
+
+## Lisans
+
+[Apache-2.0](LICENSE) · [Odin Bilişim](https://www.odinbilisim.com), Tekirdağ.

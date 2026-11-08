@@ -1,22 +1,11 @@
 #!/usr/bin/env node
-
-/**
- * Odin Informatics CLI Launcher
- * (c) 2026 Odin Informatics. All rights reserved.
- */
-
+// Launcher for the compiled CLI. Build first with `npm run build`.
 try {
-  // Prefer built JavaScript bundle if present, fallback to tsx/source
   require("../dist/index.js");
 } catch (e) {
-  if (e.code === "MODULE_NOT_FOUND") {
-    console.log("⚡ Compiling Odin CLI runtime...");
-    require("child_process").execSync("npm run build", {
-      cwd: require("path").resolve(__dirname, ".."),
-      stdio: "inherit",
-    });
-    require("../dist/index.js");
-  } else {
-    throw e;
+  if (e && e.code === "MODULE_NOT_FOUND" && String(e.message).includes("dist/index.js")) {
+    console.error("odin: derlenmiş dosya yok. Önce `npm install && npm run build` çalıştırın.");
+    process.exit(1);
   }
+  throw e;
 }
